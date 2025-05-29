@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Represents a sandwich in an order.
 public class Sandwich implements OrderItem {
     private SandwichSize size;
     private BreadType bread;
@@ -15,6 +16,7 @@ public class Sandwich implements OrderItem {
     private int cheeseCount = 0;
     private int extraCheeseCount = 0;
 
+    // Constructor for Sandwich.
     public Sandwich(SandwichSize size, BreadType bread, boolean isToasted) {
         this.size = size;
         this.bread = bread;
@@ -22,43 +24,26 @@ public class Sandwich implements OrderItem {
         this.toppings = new ArrayList<>();
     }
 
+    // Adds a topping and updates premium counts.
     public void addTopping(Topping topping, boolean isExtraPortion) {
         this.toppings.add(topping);
         if (topping.getCategory() == ToppingCategory.MEAT) {
-            if (isExtraPortion) {
-                extraMeatCount++;
-            } else {
-                meatCount++;
-            }
+            if (isExtraPortion) extraMeatCount++; else meatCount++;
         } else if (topping.getCategory() == ToppingCategory.CHEESE) {
-            if (isExtraPortion) {
-                extraCheeseCount++;
-            } else {
-                cheeseCount++;
-            }
+            if (isExtraPortion) extraCheeseCount++; else cheeseCount++;
         }
     }
 
-    public SandwichSize getSize() {
-        return size;
-    }
+    // Getters for sandwich properties.
+    public SandwichSize getSize() { return size; }
+    public BreadType getBread() { return bread; }
+    public boolean isToasted() { return isToasted; }
+    public List<Topping> getToppings() { return new ArrayList<>(toppings); } // Return copy
 
-    public BreadType getBread() {
-        return bread;
-    }
+    // Setter for toasted status.
+    public void setToasted(boolean toasted) { this.isToasted = toasted; }
 
-    public boolean isToasted() {
-        return isToasted;
-    }
-
-    public void setToasted(boolean toasted) {
-        this.isToasted = toasted;
-    }
-
-    public List<Topping> getToppings() {
-        return toppings;
-    }
-
+    // Calculates the price of the sandwich.
     @Override
     public double getPrice() {
         double totalPrice = size.getBasePrice();
@@ -69,6 +54,7 @@ public class Sandwich implements OrderItem {
         return totalPrice;
     }
 
+    // Gets display details for the sandwich.
     @Override
     public String getDisplayDetails() {
         StringBuilder details = new StringBuilder();
@@ -76,27 +62,25 @@ public class Sandwich implements OrderItem {
         details.append(String.format("  Bread: %s\n", bread.getDisplayName()));
         details.append(String.format("  Toasted: %s\n", isToasted ? "Yes" : "No"));
 
-        List<Topping> meats = toppings.stream().filter(t -> t.getCategory() == ToppingCategory.MEAT).collect(Collectors.toList());
-        List<Topping> cheeses = toppings.stream().filter(t -> t.getCategory() == ToppingCategory.CHEESE).collect(Collectors.toList());
-        List<Topping> regular = toppings.stream().filter(t -> t.getCategory() == ToppingCategory.REGULAR_TOPPING).collect(Collectors.toList());
-        List<Topping> sauces = toppings.stream().filter(t -> t.getCategory() == ToppingCategory.SAUCE).collect(Collectors.toList());
-        List<Topping> sides = toppings.stream().filter(t -> t.getCategory() == ToppingCategory.SIDE).collect(Collectors.toList());
+        // Helper to format list of toppings
+        java.util.function.Function<ToppingCategory, String> formatToppings = (cat) ->
+                toppings.stream().filter(t -> t.getCategory() == cat).map(Topping::getName).collect(Collectors.joining(", "));
 
-        if (!meats.isEmpty()) {
-            details.append("  Meats: ").append(meats.stream().map(Topping::getName).collect(Collectors.joining(", "))).append("\n");
-        }
-        if (!cheeses.isEmpty()) {
-            details.append("  Cheeses: ").append(cheeses.stream().map(Topping::getName).collect(Collectors.joining(", "))).append("\n");
-        }
-        if (!regular.isEmpty()) {
-            details.append("  Regular Toppings: ").append(regular.stream().map(Topping::getName).collect(Collectors.joining(", "))).append("\n");
-        }
-        if (!sauces.isEmpty()) {
-            details.append("  Sauces: ").append(sauces.stream().map(Topping::getName).collect(Collectors.joining(", "))).append("\n");
-        }
-        if (!sides.isEmpty()) {
-            details.append("  Sides: ").append(sides.stream().map(Topping::getName).collect(Collectors.joining(", "))).append("\n");
-        }
+        String meatsStr = formatToppings.apply(ToppingCategory.MEAT);
+        if (!meatsStr.isEmpty()) details.append("  Meats: ").append(meatsStr).append("\n");
+
+        String cheesesStr = formatToppings.apply(ToppingCategory.CHEESE);
+        if (!cheesesStr.isEmpty()) details.append("  Cheeses: ").append(cheesesStr).append("\n");
+
+        String regularStr = formatToppings.apply(ToppingCategory.REGULAR_TOPPING);
+        if (!regularStr.isEmpty()) details.append("  Regular Toppings: ").append(regularStr).append("\n");
+
+        String saucesStr = formatToppings.apply(ToppingCategory.SAUCE);
+        if (!saucesStr.isEmpty()) details.append("  Sauces: ").append(saucesStr).append("\n");
+
+        String sidesStr = formatToppings.apply(ToppingCategory.SIDE);
+        if (!sidesStr.isEmpty()) details.append("  Sides: ").append(sidesStr).append("\n");
+
         details.append(String.format("  Subtotal: $%.2f\n", getPrice()));
         return details.toString();
     }

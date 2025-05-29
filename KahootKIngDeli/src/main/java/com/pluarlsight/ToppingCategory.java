@@ -1,6 +1,6 @@
 package com.pluarlsight;
 
-
+// Enum for categories of toppings.
 public enum ToppingCategory {
     MEAT,
     CHEESE,

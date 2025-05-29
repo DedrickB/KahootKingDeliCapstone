@@ -1,5 +1,6 @@
 package com.pluarlsight;
 
+// Enum for drink sizes and their prices.
 public enum DrinkSize {
     SMALL("Small", 2.00),
     MEDIUM("Medium", 2.50),
@@ -8,21 +9,16 @@ public enum DrinkSize {
     private final String displayName;
     private final double price;
 
+    // Constructor for drink sizes.
     DrinkSize(String displayName, double price) {
         this.displayName = displayName;
         this.price = price;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public double getPrice() {
-        return price;
-    }
+    // Getters for drink size properties.
+    public String getDisplayName() { return displayName; }
+    public double getPrice() { return price; }
 
     @Override
-    public String toString() {
-        return displayName;
-    }
+    public String toString() { return displayName; } // For display
 }

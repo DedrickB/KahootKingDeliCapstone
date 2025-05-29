@@ -1,0 +1,18 @@
+Receipt for Order placed on: 05/29/2025 07:44:26
+----------------------------------------
+CUSTOM SANDWICH (12")
+  Bread: White
+  Toasted: Yes
+  Meats: Bacon, Ham, Ham
+  Cheeses: American, American
+  Regular Toppings: Tomatoes, Jalapenos, Pickles
+  Sauces: Mayo, Mustard
+  Sides: Au Jus
+  Subtotal: $19.15
+
+DRINK: Large Water - $3.00
+CHIPS: BBQ - $1.50
+----------------------------------------
+TOTAL ORDER COST: $23.65
+Thank you for your business at Kahoot King Deli!
+
